@@ -49,7 +49,7 @@ for img_file in image_files:
             # class_img_emb = model.encode(Image.open(class_img_file_path))
 
             # Check if the embeddings have been computed before
-            embeddings_file_path = class_img_file_path.replace('.png', '.json')
+            embeddings_file_path = class_img_file_path.replace('.png', '.json').replace('.bmp', '.json')
             if os.path.exists(embeddings_file_path):
                 with open(embeddings_file_path, 'r') as f:
                     class_img_emb = np.array(json.load(f)).astype(float)
