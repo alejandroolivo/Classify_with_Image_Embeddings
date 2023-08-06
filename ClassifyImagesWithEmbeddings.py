@@ -7,10 +7,10 @@ import json
 import time
 
 #Load CLIP model
-model = SentenceTransformer('clip-ViT-B-32', device='cuda:0', cache_folder='./cache_models')
+model = SentenceTransformer('clip-ViT-B-32', device='cpu', cache_folder='./cache_models')
 
 # test
-dataset = 'Tornillos'
+dataset = 'Coleo'
 mode = 'avg' # 'max' or 'avg'
 
 #Ruta a la carpeta principal que contiene las carpetas de clases
