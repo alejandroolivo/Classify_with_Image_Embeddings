@@ -10,7 +10,7 @@ import time
 model = SentenceTransformer('clip-ViT-B-32', device='cpu', cache_folder='./cache_models')
 
 # test
-dataset = 'Coleo'
+dataset = 'Tornillos'
 mode = 'avg' # 'max' or 'avg'
 
 #Ruta a la carpeta principal que contiene las carpetas de clases
