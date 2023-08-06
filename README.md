@@ -14,15 +14,19 @@ El proceso de fine-tuning o afinamiento es esencial para adaptar modelos preentr
 
 ![Fine-Tunning](./Info/Screenshot%20-%20fine-tuning.PNG)
 
+Una variación interesante del enfoque original es comparar embeddings de imágenes con embeddings de texto. En lugar de clasificar imágenes comparándolas con imágenes de referencia, en este enfoque, las imágenes se comparan directamente con descripciones textuales de clases. Esto permite que el modelo clasifique imágenes en categorías que no tienen imágenes de referencia, siempre que se proporcione una descripción textual de la clase.
+
 ## Estructura del Proyecto
+
 ### Scripts Principales
 - FineTuningViT.py: Script para entrenar el modelo Vision Transformer (ViT) con un conjunto de datos específico.
 - ClassifyImagesWithEmbeddings.py: (El script que proporcionaste) Utiliza el modelo SentenceTransformer con CLIP para clasificar imágenes en función de su similitud con imágenes de referencia.
+- ClassifyImagesWithSentenceTransformers.py: Utiliza el modelo SentenceTransformer con CLIP para clasificar imágenes en función de su similitud con descripciones textuales de clases.
 
 ### Carpetas de Datos
-./Data/[dataset_name]/Clases: Contiene carpetas para cada clase, cada una con imágenes de referencia para esa clase.
-./Data/[dataset_name]/Images: Contiene imágenes que se clasificarán y se moverán a las carpetas de clases correspondientes.
-./Data/[dataset_name]/Dataset: Lugar donde se moverán las imágenes clasificadas.
+- ./Data/[dataset_name]/Clases: Contiene carpetas para cada clase, cada una con imágenes de referencia para esa clase.
+- ./Data/[dataset_name]/Images: Contiene imágenes que se clasificarán y se moverán a las carpetas de clases correspondientes.
+- ./Data/[dataset_name]/Dataset: Lugar donde se moverán las imágenes clasificadas.
 
 ## Cómo usar
 Preparativos
@@ -31,8 +35,23 @@ Asegúrate de tener todas las dependencias instaladas. Este proyecto utiliza sen
 Configura tus carpetas de datos siguiendo la estructura mencionada anteriormente.
 
 ## Clasificación de Imágenes
-Para clasificar imágenes usando el script ImageClassifier.py:
+
+### Para clasificar imágenes usando el script ClassifyImagesWithEmbeddings.py:
 
 Establece el nombre del dataset que deseas clasificar al principio del script.
 Elige el mode de clasificación entre 'avg' y 'max'.
 Ejecuta el script. Las imágenes de ./Data/[dataset_name]/Images serán clasificadas y movidas a sus respectivas carpetas en ./Data/[dataset_name]/Dataset.
+
+
+### Para clasificar imágenes usando el script ClassifyImagesWithSentenceEmbeddings.py:
+
+- Funcionamiento:
+Se generan embeddings semánticos para descripciones textuales de cada clase (por ejemplo, 'vestido', 'pantalones', 'camiseta'). Estas descripciones son tomadas de los nombres de las carpetas en la carpeta ./Data/[nombre_del_dataset]/Clases.
+Para cada imagen en el conjunto de datos, se genera un embedding semántico utilizando el modelo CLIP.
+La similitud semántica entre el embedding de la imagen y los embeddings de texto se calcula utilizando la similitud del coseno.
+La imagen se clasifica en la clase cuya descripción textual tenga la mayor similitud con la imagen.
+Finalmente, las imágenes se organizan en subcarpetas dentro de ./Data/[nombre_del_dataset]/Dataset, basado en estas similitudes semánticas con las descripciones textuales.
+
+- Ventajas:
+Este enfoque permite una flexibilidad increíble en la definición y modificación de clases simplemente añadiendo o eliminando carpetas y ajustando sus nombres para reflejar diferentes descripciones de clase.
+También evita la necesidad de tener imágenes de referencia para cada clase, ya que las descripciones textuales sirven como referencia semántica.
