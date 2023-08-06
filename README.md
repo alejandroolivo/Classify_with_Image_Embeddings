@@ -4,16 +4,15 @@ Este es un script de Python para clasificar imágenes utilizando el modelo CLIP.
 ## Descripción
 El objetivo central de este proyecto es clasificar imágenes haciendo uso de embeddings mixtos, combinando tanto características visuales como semánticas. La idea detrás de los embeddings de imágenes, en particular, es convertir las imágenes en representaciones vectoriales de alta dimensión que encapsulen su contenido. Estas representaciones, conocidas como "embeddings", permiten que las imágenes se comparen y clasifiquen con facilidad.
 
-![Capacitación: cálculo embeddings de imágenes patrón](Info/Screenshot - capacitacion.PNG)
+![Capacitación: cálculo embeddings de imágenes patrón](./Info/Screenshot%20-%20capacitacion.PNG)
 
 La arquitectura CLIP (Contrastive Language–Image Pre-training) se destaca en esta tarea ya que ha sido entrenada con una amplia variedad de imágenes y textos, aprendiendo a asociar imágenes y palabras en un espacio de embeddings común. Este proyecto aprovecha este aprendizaje transferible para clasificar imágenes en diferentes categorías, basándose en la similitud semántica entre las imágenes desconocidas y un conjunto de imágenes de referencia.
 
-![Clasificación: calculo embeddings de imágenes a clasificar y nueva imagen](Info/Screenshot - clasificacion.PNG)
+![Clasificación: calculo embeddings de imágenes a clasificar y nueva imagen](./Info/Screenshot%20-%20clasificacion.PNG)
 
 El proceso de fine-tuning o afinamiento es esencial para adaptar modelos preentrenados, como el Vision Transformer (ViT), a conjuntos de datos específicos o dominios particulares. Al realizar fine-tuning, podemos beneficiarnos de la rica representación aprendida por el modelo en tareas anteriores y adaptarla para rendir al máximo en nuestro conjunto de datos objetivo.
 
-![Fine-Tunning](Info/Screenshot - fine-tuning.PNG)
-
+![Fine-Tunning](./Info/Screenshot%20-%20fine-tuning.PNG)
 
 ## Estructura del Proyecto
 ### Scripts Principales
