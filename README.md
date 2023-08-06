@@ -1,40 +1,30 @@
-# ClassifyImagesWithEmbeddings
-Este es un script de Python para clasificar imágenes utilizando el modelo CLIP de OpenAI y la biblioteca Sentence-Transformers.
+# Proyecto de Clasificación de Imágenes con Embeddings Mixtos
+Este es un script de Python para clasificar imágenes utilizando el modelo CLIP.
 
-## Requisitos
-Python 3.x
-Bibliotecas de Python: os, sentence_transformers, PIL, numpy, shutil
+## Descripción
+El objetivo central de este proyecto es clasificar imágenes haciendo uso de embeddings mixtos, combinando tanto características visuales como semánticas. La idea detrás de los embeddings de imágenes, en particular, es convertir las imágenes en representaciones vectoriales de alta dimensión que encapsulen su contenido. Estas representaciones, conocidas como "embeddings", permiten que las imágenes se comparen y clasifiquen con facilidad.
 
-Puede instalar las bibliotecas necesarias usando pip:
+La arquitectura CLIP (Contrastive Language–Image Pre-training) se destaca en esta tarea ya que ha sido entrenada con una amplia variedad de imágenes y textos, aprendiendo a asociar imágenes y palabras en un espacio de embeddings común. Este proyecto aprovecha este aprendizaje transferible para clasificar imágenes en diferentes categorías, basándose en la similitud semántica entre las imágenes desconocidas y un conjunto de imágenes de referencia.
 
-Code
-```
-pip install sentence_transformers Pillow numpy
-```
+## Estructura del Proyecto
+### Scripts Principales
+- FineTuningViT.py: Script para entrenar el modelo Vision Transformer (ViT) con un conjunto de datos específico.
+- ClassifyImagesWithEmbeddings.py: (El script que proporcionaste) Utiliza el modelo SentenceTransformer con CLIP para clasificar imágenes en función de su similitud con imágenes de referencia.
 
-## Uso
-El script está diseñado para clasificar imágenes en un conjunto de datos 'Tornillos'. De manera predeterminada, las imágenes se clasifican utilizando la similitud de coseno máxima entre la representación de la imagen dada y las representaciones de las imágenes de clase. También se puede utilizar la similitud de coseno promedio.
+### Carpetas de Datos
+./Data/[dataset_name]/Clases: Contiene carpetas para cada clase, cada una con imágenes de referencia para esa clase.
+./Data/[dataset_name]/Images: Contiene imágenes que se clasificarán y se moverán a las carpetas de clases correspondientes.
+./Data/[dataset_name]/Dataset: Lugar donde se moverán las imágenes clasificadas.
 
-El script buscará las imágenes a clasificar en la ruta ./Data/Tornillos/Images. Se espera que las imágenes de clase estén en la ruta ./Data/Tornillos/Clases, donde cada subcarpeta representa una clase y contiene imágenes de esa clase.
+## Cómo usar
+Preparativos
+Asegúrate de tener todas las dependencias instaladas. Este proyecto utiliza sentence_transformers, PIL, numpy, entre otros.
 
-El script moverá las imágenes clasificadas a la ruta ./Data/Tornillos/Dataset, donde cada subcarpeta representa una clase y contiene las imágenes clasificadas en esa clase.
+Configura tus carpetas de datos siguiendo la estructura mencionada anteriormente.
 
-Para ejecutar el script, simplemente corre:
-```
-python ClassifyImagesWithEmbeddings.py
-```
+## Clasificación de Imágenes
+Para clasificar imágenes usando el script ImageClassifier.py:
 
-## Funcionamiento
-El script funciona de la siguiente manera:
-
-Carga el modelo CLIP usando Sentence-Transformers.
-Para cada imagen en el conjunto de datos, calcula su representación utilizando el modelo CLIP.
-Para cada clase, calcula la similitud de coseno entre la representación de la imagen y la representación de cada imagen en esa clase.
-Dependiendo del modo seleccionado ('max' o 'avg'), se selecciona la similitud de coseno máxima o promedio entre la imagen y cada clase.
-La imagen se clasifica en la clase con la similitud de coseno máxima o promedio más alta.
-La imagen se mueve a la subcarpeta correspondiente a su clase en el conjunto de datos de salida.
-
-## Notas
-Es importante tener en cuenta que este script moverá las imágenes originales al conjunto de datos de salida. Si desea mantener las imágenes originales en su lugar, puede modificar el script para copiar las imágenes en lugar de moverlas.
-
-Además, el script puede requerir una gran cantidad de memoria y poder de cómputo si se manejan conjuntos de datos grandes o imágenes de alta resolución, debido a la naturaleza intensiva en recursos del modelo CLIP.
+Establece el nombre del dataset que deseas clasificar al principio del script.
+Elige el mode de clasificación entre 'avg' y 'max'.
+Ejecuta el script. Las imágenes de ./Data/[dataset_name]/Images serán clasificadas y movidas a sus respectivas carpetas en ./Data/[dataset_name]/Dataset.
