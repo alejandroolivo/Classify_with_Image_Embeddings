@@ -19,7 +19,7 @@ Una variación interesante del enfoque original es comparar embeddings de imáge
 ## Estructura del Proyecto
 
 ### Scripts Principales
-- FineTuningViT.py: Script para entrenar el modelo Vision Transformer (ViT) con un conjunto de datos específico.
+- ModelTrainingWithCustomImages.py: Script para entrenar el modelo Vision Transformer (ViT) con un conjunto de datos específico.
 - ClassifyImagesWithEmbeddings.py: (El script que proporcionaste) Utiliza el modelo SentenceTransformer con CLIP para clasificar imágenes en función de su similitud con imágenes de referencia.
 - ClassifyImagesWithSentenceTransformers.py: Utiliza el modelo SentenceTransformer con CLIP para clasificar imágenes en función de su similitud con descripciones textuales de clases.
 
