@@ -28,7 +28,7 @@ dataset = CustomImageDataset(main_dir='Data/Ropa/Clases', transform=transform)
 
 # Define the hyperparameters
 learning_rate = 1e-4
-epochs = 10
+epochs = 50
 train_enabled = True
 
 # Fine-tune ViT
@@ -42,7 +42,7 @@ if train_enabled:
     model = model.to(device)
     
     # Definir tamaño de batch
-    batch_size = 8
+    batch_size = 16
 
     # Crear un DataLoader
     train_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True)

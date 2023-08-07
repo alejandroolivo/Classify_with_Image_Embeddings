@@ -16,6 +16,7 @@ Data/Coleo
 Data/Coleo text
 # Data/Test
 cache_models
+*_TEST*
 
 # model checkpoint
 model_checkpoint/sam
