@@ -4,9 +4,12 @@ from PIL import Image
 import numpy as np
 import shutil
 import time
+import torch
+
+av_device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
 
 # Carga del modelo CLIP
-model = SentenceTransformer('clip-ViT-B-32', device='cpu', cache_folder='./cache_models')
+model = SentenceTransformer('clip-ViT-B-32', device=av_device, cache_folder='./cache_models')
 
 # Parámetros del dataset
 dataset = 'Ropa'

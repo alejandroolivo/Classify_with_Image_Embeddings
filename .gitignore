@@ -16,11 +16,10 @@ Data/Coleo
 Data/Coleo text
 # Data/Test
 cache_models
-Util
 
 # model checkpoint
 model_checkpoint/sam
-
+*pytorch_model.bin*
 #images
 image-matching*
 
