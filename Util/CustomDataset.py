@@ -32,6 +32,9 @@ class CustomImageDataset(Dataset):
         if self.transform:
             image = self.transform(image)
         return image
+    
+    def get_class_name(self, class_idx):
+        return self.classes[class_idx]
 
 # # Define the transformation
 # transform = transforms.Compose([

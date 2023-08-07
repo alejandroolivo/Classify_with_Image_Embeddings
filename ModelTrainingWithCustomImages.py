@@ -20,16 +20,16 @@ print('Using {} device'.format(device))
 transform = transforms.Compose([
     transforms.Resize((224, 224)),
     transforms.ToTensor(),
-    transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                        std=[0.229, 0.224, 0.225]),  # Normalization values for ImageNet
+    # transforms.Normalize(mean=[0.485, 0.456, 0.406],
+    #                     std=[0.229, 0.224, 0.225]),  # Normalization values for ImageNet
 ])
 
 dataset = CustomImageDataset(main_dir='Data/Ropa/Clases', transform=transform)
 
 # Define the hyperparameters
 learning_rate = 1e-4
-epochs = 5
-train_enabled = False
+epochs = 10
+train_enabled = True
 
 # Fine-tune ViT
 if train_enabled:
@@ -70,25 +70,33 @@ if train_enabled:
     model.save_pretrained('./ViT-custom')
     feature_extractor.save_pretrained('./ViT-custom')
 
+    # Print end of training
+    print('Training finished')
+
 else:
 
     # Load the model
     model = ViTForImageClassification.from_pretrained('./ViT-custom')
+    model.to(device)
 
     # Load the tokenizer
     feature_extractor = ViTFeatureExtractor.from_pretrained('./ViT-custom')
 
-# Test the model
-# Load the image
-# image = dataset.load_image('Data/Test/camiseta.png')
-image = Image.open('Data/Test/camiseta.png').convert('RGB')
+    # Test the model
+    # Load the image
+    image = Image.open('Data/Test/pantalones.png').convert('RGB')
 
-# Preprocess the image annd send it to the GPU
-inputs = feature_extractor(images=image, return_tensors='pt')
-inputs = {key: val.to(device) for key, val in inputs.items()}
+    # Preprocess the image
+    image = transform(image)
 
-# Classify the image
-outputs = model(**inputs)
-logits = outputs.logits
-predicted_class_idx = logits.argmax(-1).item()
-print("Predicted class:", dataset['train'].features['labels'].int2str(predicted_class_idx))
+    # Preprocess the image annd send it to the GPU
+    inputs = feature_extractor(images=image, return_tensors='pt')
+    inputs = {key: val.to(device) for key, val in inputs.items()}
+
+    # Classify the image
+    outputs = model(**inputs)
+    logits = outputs.logits
+    predicted_class_idx = logits.argmax(-1).item()
+    predicted_class_name = dataset.get_class_name(predicted_class_idx)
+    print("Predicted class:", predicted_class_name)
+
