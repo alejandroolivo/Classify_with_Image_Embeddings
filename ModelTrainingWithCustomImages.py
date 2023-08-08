@@ -22,11 +22,11 @@ transform = transforms.Compose([
     transforms.ToTensor(),
 ])
 
-dataset = CustomImageDataset(main_dir='Data/Ropa/Clases', transform=transform)
+dataset = CustomImageDataset(main_dir='Data/Coleo_TEST_250 Trainset/Clases', transform=transform)
 
 # Define the hyperparameters
-learning_rate = 2e-3
-epochs = 5
+learning_rate = 2e-5
+epochs = 50
 train_enabled = True
 
 # Fine-tune ViT

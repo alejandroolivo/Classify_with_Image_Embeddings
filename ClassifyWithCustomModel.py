@@ -6,11 +6,14 @@ import numpy as np
 import shutil
 import time
 from Util.CustomDataset import CustomImageDataset
+import torch
 
 # test
 proyecto = 'Coleo_TEST_250 Trainset'
 mode = 'avg' # 'max' or 'avg'
-device = 'cpu'
+
+device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
+print('Using {} device'.format(device))
 
 # Define the transformation
 transform = transforms.Compose([
