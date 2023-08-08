@@ -7,7 +7,7 @@ import numpy as np
 import os
 os.environ['CUDA_LAUNCH_BLOCKING'] = "1"
 import torch
-
+from torch import nn
 
 # Check if GPU is available
 device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
@@ -18,21 +18,22 @@ print('Using {} device'.format(device))
 # Load the dataset
 # Define the transformation
 transform = transforms.Compose([
-    transforms.Resize((224, 224)),
+    transforms.Resize((480, 640)),
     transforms.ToTensor(),
-    # transforms.Normalize(mean=[0.485, 0.456, 0.406],
-    #                     std=[0.229, 0.224, 0.225]),  # Normalization values for ImageNet
 ])
 
 dataset = CustomImageDataset(main_dir='Data/Ropa/Clases', transform=transform)
 
 # Define the hyperparameters
-learning_rate = 1e-4
-epochs = 50
+learning_rate = 2e-3
+epochs = 5
 train_enabled = True
 
 # Fine-tune ViT
 if train_enabled:
+    
+    # Define the loss function
+    criterion = nn.CrossEntropyLoss()
 
     # Load the tokenizer for ViT
     feature_extractor = ViTFeatureExtractor.from_pretrained('google/vit-base-patch16-224-in21k')
@@ -42,7 +43,7 @@ if train_enabled:
     model = model.to(device)
     
     # Definir tamaño de batch
-    batch_size = 16
+    batch_size = 32
 
     # Crear un DataLoader
     train_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
@@ -50,21 +51,26 @@ if train_enabled:
     # Entrena el modelo
     model.train()
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
+
     for epoch in range(epochs):
         print(f'Epoch {epoch + 1}/{epochs}')
+
         for batch in train_loader:
-            # Desempaqueta el lote
-            batch_inputs, batch_labels = batch
+            batch_images, batch_labels = batch
+            batch_inputs = feature_extractor(batch_images, return_tensors="pt")
+            pixel_values = batch_inputs["pixel_values"].to(device)
+            batch_labels = batch_labels.to(device)
 
-            # Mueve los datos del lote a la GPU
-            batch_inputs, batch_labels = batch_inputs.to(device), batch_labels.to(device)
-
-            # Pasa el lote a través del modelo
             optimizer.zero_grad()
-            outputs = model(pixel_values=batch_inputs, labels=batch_labels)
-            loss = outputs.loss
+            outputs = model(pixel_values=pixel_values, labels=batch_labels)
+            logits = outputs.logits
+
+            loss = criterion(logits, batch_labels)
+
+            print(f'Loss: {loss.item()} for epoch {epoch + 1}')
             loss.backward()
             optimizer.step()
+
 
     # Save the model
     model.save_pretrained('./ViT-custom')
@@ -84,7 +90,7 @@ else:
 
     # Test the model
     # Load the image
-    image = Image.open('Data/Test/pantalones.png').convert('RGB')
+    image = Image.open('Data/Test/camisa.png').convert('RGB')
 
     # Preprocess the image
     image = transform(image)
