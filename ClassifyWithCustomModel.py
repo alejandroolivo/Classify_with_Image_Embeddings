@@ -9,8 +9,7 @@ from Util.CustomDataset import CustomImageDataset
 import torch
 
 # test
-proyecto = 'Coleo_TEST_250 Trainset'
-mode = 'avg' # 'max' or 'avg'
+proyecto = 'Ropa'
 
 device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
 print('Using {} device'.format(device))
@@ -63,7 +62,7 @@ for img_file in image_files:
     logits = outputs.logits
     predicted_class_idx = logits.argmax(-1).item()
     predicted_class_name = dataset.get_class_name(predicted_class_idx)
-    print("Predicted class:", predicted_class_name)
+    print("Predicted class for " + img_file + ":", predicted_class_name)
     
     # end time
     end_time = time.time()

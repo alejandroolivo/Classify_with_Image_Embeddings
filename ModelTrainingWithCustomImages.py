@@ -25,7 +25,7 @@ transform = transforms.Compose([
 dataset = CustomImageDataset(main_dir='Data/Coleo_TEST_250 Trainset/Clases', transform=transform)
 
 # Define the hyperparameters
-learning_rate = 2e-5
+learning_rate = 1e-4
 epochs = 50
 train_enabled = True
 
