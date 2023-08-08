@@ -13,6 +13,8 @@ from torch import nn
 device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
 print('Using {} device'.format(device))
 
+proyecto = 'Ropa'
+
 # Fine-tune ViT
 
 # Load the dataset
@@ -22,12 +24,13 @@ transform = transforms.Compose([
     transforms.ToTensor(),
 ])
 
-dataset = CustomImageDataset(main_dir='Data/Coleo_TEST_250 Trainset/Clases', transform=transform)
+dataset = CustomImageDataset(main_dir='Data/' + proyecto + '/Clases', transform=transform)
 
 # Define the hyperparameters
-learning_rate = 1e-4
-epochs = 50
+learning_rate = 1e-5
+epochs = 10
 train_enabled = True
+retrain_enabled = True
 
 # Fine-tune ViT
 if train_enabled:
@@ -35,12 +38,21 @@ if train_enabled:
     # Define the loss function
     criterion = nn.CrossEntropyLoss()
 
-    # Load the tokenizer for ViT
-    feature_extractor = ViTFeatureExtractor.from_pretrained('google/vit-base-patch16-224-in21k')
+    if(retrain_enabled):
+        # Load the model
+        feature_extractor = ViTFeatureExtractor.from_pretrained('./ViT-custom')
 
-    # Load the model for ViT
-    model = ViTForImageClassification.from_pretrained('google/vit-base-patch16-224-in21k', num_labels=9)
-    model = model.to(device)
+        model = ViTForImageClassification.from_pretrained('./ViT-custom')
+        model.to(device)
+
+    else:
+
+        # Load the tokenizer for ViT
+        feature_extractor = ViTFeatureExtractor.from_pretrained('google/vit-base-patch16-224-in21k')
+
+        # Load the model for ViT
+        model = ViTForImageClassification.from_pretrained('google/vit-base-patch16-224-in21k', num_labels=9)
+        model = model.to(device)
     
     # Definir tamaño de batch
     batch_size = 32
