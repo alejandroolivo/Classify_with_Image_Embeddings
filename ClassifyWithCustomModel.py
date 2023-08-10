@@ -16,7 +16,7 @@ print('Using {} device'.format(device))
 
 # Define the transformation
 transform = transforms.Compose([
-    transforms.Resize((480, 640)),
+    transforms.Resize((240, 320)),
     transforms.ToTensor(),
 ])
 

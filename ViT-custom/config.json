@@ -1,5 +1,5 @@
 {
-  "_name_or_path": "google/vit-base-patch16-224-in21k",
+  "_name_or_path": "./ViT-custom",
   "architectures": [
     "ViTForImageClassification"
   ],

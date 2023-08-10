@@ -8,6 +8,8 @@ import os
 os.environ['CUDA_LAUNCH_BLOCKING'] = "1"
 import torch
 from torch import nn
+import matplotlib.pyplot as plt
+from tqdm import tqdm
 
 # Check if GPU is available
 device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
@@ -20,17 +22,17 @@ proyecto = 'Ropa'
 # Load the dataset
 # Define the transformation
 transform = transforms.Compose([
-    transforms.Resize((480, 640)),
+    transforms.Resize((120, 160)),
     transforms.ToTensor(),
 ])
 
 dataset = CustomImageDataset(main_dir='Data/' + proyecto + '/Clases', transform=transform)
 
 # Define the hyperparameters
-learning_rate = 1e-5
+learning_rate = 2e-5
 epochs = 10
 train_enabled = True
-retrain_enabled = True
+retrain_enabled = False
 
 # Fine-tune ViT
 if train_enabled:
@@ -64,10 +66,18 @@ if train_enabled:
     model.train()
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
-    for epoch in range(epochs):
+    # List to hold loss values
+    loss_values = []
+
+    # Wrap the outer loop with tqdm for epochs
+    for epoch in tqdm(range(epochs), desc="Training", position=0):
         print(f'Epoch {epoch + 1}/{epochs}')
 
-        for batch in train_loader:
+        # Variable to hold the cumulative loss for the epoch
+        epoch_loss = 0
+
+        # Wrap the inner loop with tqdm for batches
+        for batch in tqdm(train_loader, desc=f"Epoch {epoch + 1}", leave=False):
             batch_images, batch_labels = batch
             batch_inputs = feature_extractor(batch_images, return_tensors="pt")
             pixel_values = batch_inputs["pixel_values"].to(device)
@@ -78,10 +88,29 @@ if train_enabled:
             logits = outputs.logits
 
             loss = criterion(logits, batch_labels)
-
-            print(f'Loss: {loss.item()} for epoch {epoch + 1}')
             loss.backward()
             optimizer.step()
+
+            # Accumulate the loss
+            epoch_loss += loss.item()
+
+        # Calculate the average loss for the epoch and append to loss_values
+        avg_epoch_loss = epoch_loss / len(train_loader)
+        loss_values.append(avg_epoch_loss)
+        print(f'Average loss for epoch {epoch + 1}: {avg_epoch_loss}')
+
+    # Save the model
+    model.save_pretrained('./ViT-custom')
+    feature_extractor.save_pretrained('./ViT-custom')
+
+    # Plot the loss values
+    plt.plot(loss_values)
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss')
+    plt.title('Training Loss')
+    plt.grid(True)
+    plt.savefig('./ViT-custom/loss_plot.png') # Save the plot as an image
+    plt.show() # Display the plot
 
 
     # Save the model
